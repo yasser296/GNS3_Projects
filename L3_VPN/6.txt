@@ -1,0 +1,27 @@
+R6(config)#interface serial 2/1
+R6(config-if)#no shutdown
+R6(config-if)#ip address 65.1.1.6 255.255.255.0
+R6(config-if)#ex
+
+R6(config)#interface loopback 6
+R6(config-if)#ip address 6.6.6.6 255.255.255.0
+R6(config-if)#ex
+
+R6(config)#interface serial 2/2
+R6(config-if)#ip address 76.1.1.6 255.255.255.0
+R6(config-if)#ex
+
+
+R6(config)#router eigrp 100
+R6(config-router)#no auto-summary
+R6(config-router)#network 0.0.0.0 255.255.255.255
+
+
+
+R6(config)#mpls ip
+
+R6(config)#interface serial 2/1
+R6(config-if)#mpls ip
+
+R6(config)#interface serial 2/2
+R6(config-if)#mpls ip

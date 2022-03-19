@@ -1,0 +1,110 @@
+router eigrp 100
+no auto-summary
+network 0.0.0.0 255.255.255.255
+
+
+
+
+passive-interface default
+no passive-interface serial 2/2
+
+
+
+
+
+mpls ip 
+interface serial 2/0
+mpls ip
+
+mpls ip 
+interface serial 2/1
+mpls ip
+
+mpls ip 
+interface serial 2/2
+mpls ip
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router bgp 100
+neighbor 3.3.3.3 remote-as 100
+neighbor 3.3.3.3 update-source loopback 7
+
+address-family vpnv4
+neighbor 3.3.3.3 activate
+neighbor 3.3.3.3 send-community extended
+
+
+
+
+ip vrf CE1
+route-target both 1:1
+rd 1:1
+exit
+
+interface serial 2/0
+ip vrf forwarding CE1
+ip address 87.1.1.7 255.255.255.0
+ex
+
+
+ip vrf CE2
+route-target both 2:2
+rd 2:2
+exit
+
+
+interface serial 2/1
+ip vrf forwarding CE2
+ip address 97.1.1.7 255.255.255.0
+ex
+
+
+
+
+
+
+
+router ospf 1 vrf CE1
+network 0.0.0.0 255.255.255.255 area 1
+
+router ospf 2 vrf CE2
+network 0.0.0.0 255.255.255.255 area 2
+
+
+
+
+
+
+
+
+
+
+
+router bgp 100
+address-family ipv4
+redistribute ospf 1 vrf CE1
+redistribute ospf 2 vrf CE2
+ex
+ex
+
+
+
+router ospf 1 vrf CE1
+redistribute bgp 100 subnets
+ex
+
+router ospf 2 vrf CE2
+redistribute bgp 100 subnets
+ex

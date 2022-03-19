@@ -1,0 +1,107 @@
+R7(config)#interface serial 2/2
+R7(config-if)#ip address 76.1.1.7 255.255.255.0
+R7(config-if)#ex
+
+R7(config)#interface loopback 7
+R7(config-if)#ip address 7.7.7.7 255.255.255.0
+R7(config-if)#ex
+
+R7(config)#interface serial 2/0
+R7(config-if)#no shutdown
+R7(config-if)#ip address 87.1.1.7 255.255.255.0
+R7(config-if)#ex
+
+R7(config)#interface serial 2/1
+R7(config-if)#no shutdown
+R7(config-if)#ip address 97.1.1.7 255.255.255.0
+R7(config-if)#ex
+
+
+
+
+
+
+
+
+
+R7(config)#router eigrp 100
+R7(config-router)#no auto-summary
+R7(config-router)#network 0.0.0.0 255.255.255.255
+R7(config-router)#passive-interface default
+R7(config-router)#no passive-interface serial 2/2
+R7(config-router)#
+
+
+
+
+
+R7(config)#mpls ip
+R7(config)#interface serial 2/2
+R7(config-if)#mpls ip
+
+
+
+
+
+R7(config)#router bgp 100
+R7(config-router)#neighbor 3.3.3.3 remote-as 100
+R7(config-router)#neighbor 3.3.3.3 update-source loopback 7
+R7(config-router)#address-family vpnv4
+R7(config-router-af)#neighbor 3.3.3.3 activate
+R7(config-router-af)#neighbor 3.3.3.3 send-community extended
+
+
+
+R7(config)#ip vrf CE1
+R7(config-vrf)#route-target both 1:1
+R7(config-vrf)#rd 1:1
+R7(config-vrf)#exit
+
+R7(config)#interface serial 2/0
+R7(config-if)#ip vrf forwarding CE1
+% Interface Serial2/0 IP address 87.1.1.7 removed due to enabling VRF CE1
+R7(config-if)#ip address 87.1.1.7 255.255.255.0
+R7(config-if)#ex
+
+R7(config)#ip vrf CE2
+R7(config-vrf)#route-target both 2:2
+R7(config-vrf)#rd 2:2
+R7(config-vrf)#exit
+
+R7(config)#interface serial 2/1
+R7(config-if)#ip vrf forwarding CE2
+% Interface Serial2/1 IP address 97.1.1.7 removed due to enabling VRF CE2
+R7(config-if)#ip address 97.1.1.7 255.255.255.0
+R7(config-if)#ex
+
+
+
+
+
+R7(config)#router ospf 1 vrf CE1
+R7(config-router)#network 0.0.0.0 255.255.255.255 area 1
+
+R7(config)#router ospf 2 vrf CE2
+R7(config-router)#network 0.0.0.0 255.255.255.255 area 2
+
+
+
+
+
+
+R7(config)#router bgp 100
+R7(config-router)#address-family ipv4
+R7(config-router-af)#redistribute ospf 1 vrf CE1
+R7(config-router-af)#redistribute ospf 2 vrf CE2
+
+
+
+R7(config)#router ospf 1 vrf CE1
+R7(config-router)#redistribute bgp 100 subnets
+
+R7(config)#router ospf 2 vrf CE2
+R7(config-router)#redistribute bgp 100 subnets
+
+
+
+

@@ -1,0 +1,32 @@
+R4(config)#interface serial 2/2
+R4(config-if)#no shutdown
+R4(config-if)#ip address 43.1.1.4 255.255.255.0
+R4(config-if)#ex
+
+R4(config)#interface loopback 4
+R4(config-if)#no shutdown
+R4(config-if)#ip address 4.4.4.4 255.255.255.0
+R4(config-if)#ex
+
+R4(config)#interface serial 2/0
+R4(config-if)#no shutdown
+R4(config-if)#ip address 54.1.1.4 255.255.255.0
+R4(config-if)#ex
+
+
+
+
+R4(config)#router eigrp 100
+R4(config-router)#no auto-summary
+R4(config-router)#network 0.0.0.0 255.255.255.255
+
+
+
+R4(config)#mpls ip
+
+R4(config)#interface serial 2/2
+R4(config-if)#mpls ip
+R4(config-if)#ex
+
+R4(config)#interface serial 2/0
+R4(config-if)#mpls ip

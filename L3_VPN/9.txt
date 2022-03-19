@@ -1,0 +1,15 @@
+R9(config)#interface serial 2/1
+R9(config-if)#no shutdown
+R9(config-if)#ip address 97.1.1.9 255.255.255.0
+R9(config-if)#ex
+
+R9(config)#interface loopback 9
+R9(config-if)#ip address 9.9.9.9 255.255.255.0
+R9(config-if)#ex
+
+R9(config)#router ospf 2
+R9(config-router)#network 0.0.0.0 255.255.255.255 area 2
+
+
+
+

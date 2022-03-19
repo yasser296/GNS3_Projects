@@ -1,0 +1,11 @@
+R8(config)#interface serial 2/0
+R8(config-if)#no shutdown
+R8(config-if)#ip address 87.1.1.8 255.255.255.0
+R8(config-if)#ex
+
+R8(config)#interface loopback 8
+R8(config-if)#ip address 8.8.8.8 255.255.255.0
+R8(config-if)#ex
+
+R8(config)#router ospf 1
+R8(config-router)#network 0.0.0.0 255.255.255.255 area 1

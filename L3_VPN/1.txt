@@ -1,0 +1,11 @@
+R1(config)#interface serial 2/0
+R1(config-if)#no shutdown
+R1(config-if)#ip address 31.1.1.1 255.255.255.0
+R1(config-if)#ex
+
+R1(config)#interface loopback 1
+R1(config-if)#ip address 1.1.1.1 255.255.255.0
+R1(config-if)#ex
+
+R1(config)#router ospf 1
+R1(config-router)#network 0.0.0.0 255.255.255.255 area 1
